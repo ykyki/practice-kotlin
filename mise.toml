@@ -1,0 +1,7 @@
+[tools]
+# KGP 2.1.0 supports only gradle 7.6.3–8.10
+# cf: https://kotlinlang.org/docs/gradle-configure-project.html
+gradle = "8.10.2"
+
+java = "openjdk-21.0.2"
+
