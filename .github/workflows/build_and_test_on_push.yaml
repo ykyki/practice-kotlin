@@ -2,9 +2,10 @@ name: Build and test on push
 
 on:
   push:
-env:
-  JAVA_VERSION: '21'
-  JAVA_DISTRIBUTION: 'oracle'
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   gradle-build-and-test:
@@ -14,10 +15,6 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
       - uses: gradle/actions/setup-gradle@v4
       - run: ./gradlew build
       - run: ./gradlew test
@@ -29,10 +26,6 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
       - name: Generate and submit dependency graph
         # cf: https://github.com/gradle/actions/blob/main/docs/dependency-submission.md
         uses: gradle/actions/dependency-submission@v4
