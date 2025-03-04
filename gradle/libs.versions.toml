@@ -3,6 +3,8 @@ java = "21"
 kotlin = "2.1.10"
 kotest = "5.9.0"
 mockk = "1.13.16"
+arrow = "2.0.1"
+kotlinx-coroutines = "1.10.1"
 
 [libraries]
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -16,9 +18,24 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 apache-commons-text = { module = "org.apache.commons:commons-text", version = "1.12.0" }
 
+arrow-stack = { module = "io.arrow-kt:arrow-stack", version.ref = "arrow" }
+arrow-core = { module = "io.arrow-kt:arrow-core" }
+arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
+
+kotlinx-corutine-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+
 [bundles]
 kotest = [
     "kotest-runner-junit5",
     "kotest-assertions-core",
     "kotest-property",
+]
+
+arrow = [
+    "arrow-core",
+    "arrow-fx-coroutines",
+]
+
+kotlinx-coroutines = [
+    "kotlinx-corutine-core",
 ]
