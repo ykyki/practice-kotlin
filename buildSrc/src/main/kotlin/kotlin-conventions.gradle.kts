@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    api(platform(libs.kotest.bom))
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.mockk)
 }
