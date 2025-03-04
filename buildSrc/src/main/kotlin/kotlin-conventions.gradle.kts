@@ -1,0 +1,29 @@
+import org.gradle.accessors.dm.LibrariesForLibs
+
+val libs = the<LibrariesForLibs>()
+group = "practice.kotlin"
+
+plugins {
+    kotlin("jvm")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(kotlin("test"))
+    testImplementation(libs.bundles.kotest)
+    testImplementation(libs.mockk)
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.get())
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}

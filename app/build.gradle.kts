@@ -1,5 +1,5 @@
 plugins {
-    id(Plugins.KotlinCorePlugin)
+    id("kotlin-conventions")
     application
 }
 

@@ -1,8 +1,25 @@
 [versions]
-kotlin-gradle-plugin = "2.1.10"
+java = "21"
+kotlin = "2.1.10"
+kotest = "5.9.0"
+mockk = "1.13.16"
 
 [libraries]
-# used in build.gradle.kts
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+kotest-bom = { module = "io.kotest:kotest-bom", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 apache-commons-text = { module = "org.apache.commons:commons-text", version = "1.12.0" }
+
+[bundles]
+kotest = [
+    #    "kotest-bom",
+    "kotest-runner-junit5",
+    "kotest-assertions-core",
+    "kotest-property",
+]

@@ -4,6 +4,8 @@ plugins {
 }
 
 rootProject.name = "practice-kotlin"
+
 include(
     "app",
+    "dom-func",
 )
