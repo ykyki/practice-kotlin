@@ -6,10 +6,7 @@ object Hello {
         times: Int,
         printer: (String) -> Unit
     ) {
-        // repeat(times) {
-        //     printer("Hello, $name!\n")
-        // }
-        for (i in 0 until times) {
+        repeat(times) {
             printer("Hello, $name!\n")
         }
     }

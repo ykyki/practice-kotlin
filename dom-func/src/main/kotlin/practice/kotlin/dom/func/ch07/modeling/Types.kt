@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package practice.kotlin.dom.func.ch07.modeling
 
 import arrow.core.Either
