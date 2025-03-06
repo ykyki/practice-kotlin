@@ -18,7 +18,6 @@ sealed class Cart protected constructor(
     abstract fun prettyString(): String
 }
 
-@ConsistentCopyVisibility
 data class CartEmpty internal constructor(
     override val cartId: String,
 ) : Cart(
@@ -29,7 +28,6 @@ data class CartEmpty internal constructor(
     override fun prettyString(): String = "CartEmpty(cartId=$cartId)"
 }
 
-@ConsistentCopyVisibility
 data class CartActive internal constructor(
     override val cartId: String,
     val items: NonEmptyList<Item>,
@@ -45,7 +43,6 @@ data class CartActive internal constructor(
     fun pay(): CartPaid = CartPaid(cartId, items)
 }
 
-@ConsistentCopyVisibility
 data class CartPaid internal constructor(
     override val cartId: String,
     val items: List<Item>,
