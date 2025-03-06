@@ -24,6 +24,12 @@ kotlin {
         languageVersion = JavaLanguageVersion.of(libs.versions.java.get())
         vendor = JvmVendorSpec.ADOPTIUM
     }
+
+    compilerOptions {
+        freeCompilerArgs.add(
+            "-Xconsistent-data-class-copy-visibility",
+        )
+    }
 }
 
 tasks.withType<Test>().configureEach {
