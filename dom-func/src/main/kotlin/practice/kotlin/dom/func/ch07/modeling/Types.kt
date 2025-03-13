@@ -10,90 +10,88 @@ import java.time.OffsetDateTime
 // Util
 // ---------
 
-typealias AsyncResult<L, R> = Deferred<Either<L, R>>
+internal typealias AsyncResult<L, R> = Deferred<Either<L, R>>
 
-// ---------
-// Input Data
-// ---------
-
-data class UnvalidatedOrder(
-    val orderId: OrderId,
-    val customerInfo: UnvalidatedCustomer,
-    val shippingAddress: UnvalidatedAddress,
-)
-
-data class UnvalidatedCustomer(
-    val name: String,
-    val email: String,
-)
-
-interface UnvalidatedAddress // TODO
-
-// ---------
-// Input Command
-// ---------
-
-data class Command<A>(
+internal data class Command<A>(
     val data: A,
     val timestamp: OffsetDateTime,
     val userId: String,
 )
 
-typealias PlaceOrderCommand = Command<UnvalidatedOrder>
+// ---------
+// Input Port
+// ---------
+
+public data class UnvalidatedOrder(
+    val orderId: OrderId,
+    val customerInfo: UnvalidatedCustomer,
+    val shippingAddress: UnvalidatedAddress,
+)
+
+public data class UnvalidatedCustomer(
+    val name: String,
+    val email: String,
+)
+
+public interface UnvalidatedAddress // TODO
 
 // ---------
-// Public Api
+// Workflow
 // ---------
+
+internal typealias PlaceOrderWorkflow = (PlaceOrderCommand)
+-> AsyncResult<PlaceOrderError, List<PlaceOrderEvent>>
+
+internal typealias PlaceOrderCommand = Command<UnvalidatedOrder>
 
 @JvmInline
-value class OrderPlaced(val price: PricedOrder)
+internal value class OrderPlaced(
+    val price: PricedOrder,
+)
 
-data class BillableOrderPlaced(
+internal data class BillableOrderPlaced(
     val orderId: OrderId,
     val address: Address,
     val billingAmount: BillingAmount,
 )
 
-data class OrderAcknowledgementSent(
+internal data class OrderAcknowledgementSent(
     val orderId: OrderId,
     val emailAddress: EmailAddress,
 )
 
-sealed class PlaceOrderEvent {
-    data class OrderPlaced(val orderPlaced: OrderPlaced) : PlaceOrderEvent()
-    data class BillableOrderPlaced(val billableOrderPlaced: BillableOrderPlaced) : PlaceOrderEvent()
-    data class AcknowledgementSent(val orderAcknowledgementSent: OrderAcknowledgementSent) : PlaceOrderEvent()
+internal sealed class PlaceOrderEvent {
+    internal data class OrderPlaced(val orderPlaced: OrderPlaced) : PlaceOrderEvent()
+    internal data class BillableOrderPlaced(val billableOrderPlaced: BillableOrderPlaced) : PlaceOrderEvent()
+    internal data class AcknowledgementSent(val orderAcknowledgementSent: OrderAcknowledgementSent) : PlaceOrderEvent()
 }
 
-interface PlaceOrderError
-
-typealias PlaceOrderWorkflow = (PlaceOrderCommand)
--> AsyncResult<PlaceOrderError, List<PlaceOrderEvent>>
+internal interface PlaceOrderError
 
 // ---------
 // Lifecycle of Order
 // ---------
 
-sealed class Order {
+internal sealed class Order {
     data class Unvalidated(val unvalidatedOrder: UnvalidatedOrder) : Order()
     data class Validated(val validatedOrder: ValidatedOrder) : Order()
     data class Priced(val pricedOrder: PricedOrder) : Order()
 }
 
-data class ValidatedOrder(
+internal data class ValidatedOrder(
     val orderId: OrderId,
     val customerInfo: CustomerInfo,
     val shippingAddress: ValidatedAddress,
     val orderLines: List<ValidatedOrderLine>,
 )
 
-interface OrderId
-interface CustomerInfo
-interface Address
-typealias ValidatedOrderLine = Nothing // TODO
+public interface OrderId
+internal interface CustomerInfo
+internal interface Address
+internal typealias ValidatedOrderLine = Nothing // TODO
 
-interface PricedOrder
-interface BillingAmount
+internal interface PricedOrder
+internal interface BillingAmount
 
 // ---------
 // Type definitions of internal steps
@@ -101,67 +99,67 @@ interface BillingAmount
 
 // --------- verify order
 
-typealias ValidateOrder = (CheckProductCodeExists)
+internal typealias ValidateOrder = (CheckProductCodeExists)
 -> (CheckAddressExists)
 -> (UnvalidatedOrder)
 -> AsyncResult<List<ValidationError>, ValidatedOrder>
 
-typealias CheckProductCodeExists = (ProductCode) -> AsyncResult<Unit, Boolean>
+internal typealias CheckProductCodeExists = (ProductCode) -> AsyncResult<Unit, Boolean>
 
-typealias CheckAddressExists = (UnvalidatedAddress)
+internal typealias CheckAddressExists = (UnvalidatedAddress)
 -> AsyncResult<AddressValidationError, ValidatedAddress>
 
-interface ValidationError
+internal interface ValidationError
 
 @JvmInline
-value class ValidatedAddress(val address: UnvalidatedAddress)
+internal value class ValidatedAddress(val address: UnvalidatedAddress)
 
-interface ProductCode
+internal interface ProductCode
 
 @JvmInline
-value class AddressValidationError(val message: String)
+internal value class AddressValidationError(val message: String)
 
 // --------- price order
 
-typealias PriceOrder = (GetProductPrice)
+internal typealias PriceOrder = (GetProductPrice)
 -> (ValidatedOrder)
 -> Either<PricingError, PricedOrder>
 
-typealias GetProductPrice = (ProductCode)
+internal typealias GetProductPrice = (ProductCode)
 -> Price
 
-interface Price
+internal interface Price
 
 @JvmInline
-value class PricingError(val message: String)
+internal value class PricingError(val message: String)
 
 // --------- create order acknowledgment
 
-typealias AcknowledgeOrder = (CreateOrderAcknowledgmentLetter)
+internal typealias AcknowledgeOrder = (CreateOrderAcknowledgmentLetter)
 -> (SendOrderAcknowledgment)
 -> (PricedOrder)
 -> Deferred<OrderAcknowledgementSent?>
 
-typealias CreateOrderAcknowledgmentLetter = (PricedOrder)
+internal typealias CreateOrderAcknowledgmentLetter = (PricedOrder)
 -> HtmlString
 
-sealed class SendResult {
+internal sealed class SendResult {
     object Success : SendResult()
     object Failure : SendResult()
 }
-typealias SendOrderAcknowledgment = (OrderAcknowledgment)
+internal typealias SendOrderAcknowledgment = (OrderAcknowledgment)
 -> Deferred<SendResult>
 
-data class OrderAcknowledgment(
+internal data class OrderAcknowledgment(
     val emailAddress: EmailAddress,
     val letter: HtmlString,
 )
 
 @JvmInline
-value class HtmlString(val value: String)
-interface EmailAddress
+internal value class HtmlString(val value: String)
+internal interface EmailAddress
 
 // --------- create events
 
-typealias CreateEvents = (PricedOrder)
+internal typealias CreateEvents = (PricedOrder)
 -> List<PlaceOrderEvent>

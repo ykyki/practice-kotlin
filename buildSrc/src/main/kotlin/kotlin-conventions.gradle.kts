@@ -26,6 +26,10 @@ kotlin {
             "-Xconsistent-data-class-copy-visibility",
         )
     }
+
+    // enable explicit api mode
+    // cf: https://kotlinlang.org/docs/whatsnew14.html#mixing-named-and-positional-arguments
+    explicitApi()
 }
 
 tasks.withType<Test>().configureEach {

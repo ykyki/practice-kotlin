@@ -1,7 +1,7 @@
 package practice.kotlin.dom.func
 
-object Hello {
-    fun sayHello(
+internal object Hello {
+    internal fun sayHello(
         name: String,
         times: Int,
         printer: (String) -> Unit

@@ -10,3 +10,7 @@ dependencies {
 application {
     mainClass = "practice.kotlin.app.AppKt"
 }
+
+kotlin {
+    explicitApiWarning()
+}
