@@ -9,6 +9,3 @@ dependencies {
     implementation(libs.bundles.arrow)
     implementation(libs.bundles.kotlinx.coroutines)
 }
-
-kotlin {
-}
