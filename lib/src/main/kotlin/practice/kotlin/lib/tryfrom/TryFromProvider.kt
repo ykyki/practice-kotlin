@@ -5,11 +5,11 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import java.util.regex.Pattern
 
-public interface TryFrom<Self, in From, out E> {
-    public fun tryFrom(from: From): Result<Self, E>
+public interface TryFromProvider<T, in F, out E : Any> {
+    public fun tryFrom(from: F): Result<T, E>
 }
 
-public infix fun <Self, From, E> From.tryInto(v: TryFrom<Self, From, E>) = v.tryFrom(this)
+public infix fun <T, F, E : Any> F.tryInto(v: TryFromProvider<T, F, E>) = v.tryFrom(this)
 
 @JvmInline
 internal value class ErrorString(val value: String)
@@ -17,7 +17,7 @@ internal value class ErrorString(val value: String)
 internal class Email(
     val value: String,
 ) {
-    companion object : TryFrom<Email, String, ErrorString> {
+    companion object : TryFromProvider<Email, String, ErrorString> {
         @Suppress("MaxLineLength")
         private val EMAIL_PATTERN = Pattern.compile(
             "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
@@ -32,7 +32,7 @@ internal class Email(
 
 // Example usage
 @Suppress("unused")
-private val e1 = Email.tryFrom("foo")
+private val r1 = Email.tryFrom("foo")
 
 @Suppress("unused")
-private val e2 = "foo".tryInto(Email)
+private val r2 = "foo".tryInto(Email)
