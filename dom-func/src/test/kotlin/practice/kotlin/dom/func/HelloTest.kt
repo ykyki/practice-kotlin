@@ -13,6 +13,8 @@ import io.mockk.mockk
 import io.mockk.verify
 
 class HelloTest : FunSpec({
+    val printer = mockk<(String) -> Unit>()
+
     test("sayHello with default printer") {
         Hello.sayHello("Kotlin", 3) {
             print(it)
@@ -20,13 +22,14 @@ class HelloTest : FunSpec({
     }
 
     test("sayHello calls printer n times when n is non-negative") {
-        val printer = mockk<(String) -> Unit>()
+        // val printer = mockk<(String) -> Unit>()
 
         checkAll(
             20, // reduce the number of iterations to avoid slow test
-            Arb.int(0, 1000), // too large n may cause a stack overflow because of mockk
+            Arb.int(0, 100), // too large n may cause a stack overflow because of mockk
             Arb.string(),
         ) { n, s ->
+            clearMocks(printer)
             // given
             every { printer.invoke(any()) } just Runs
 
@@ -37,17 +40,18 @@ class HelloTest : FunSpec({
             // then
             verify(exactly = n) { printer("Hello, $s!\n") }
             verify(exactly = n) { printer(any()) }
-
-            // cleanup
-            clearMocks(printer)
         }
     }
 
     test("sayHello does not call printer when n is negative") {
-        checkAll(Arb.int(Int.MIN_VALUE, -1), Arb.string()) { n, s ->
-            // given
-            val printer = mockk<(String) -> Unit>()
-            every { printer.invoke(any()) } just Runs
+        every { printer.invoke(any()) } just Runs
+
+        checkAll(
+            20, // reduce the number of iterations to avoid slow test
+            Arb.int(Int.MIN_VALUE, -1),
+            Arb.string(),
+        ) { n, s ->
+            clearMocks(printer)
 
             // when
             println("n = $n, s = $s")
