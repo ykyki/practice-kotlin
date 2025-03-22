@@ -22,8 +22,6 @@ class HelloTest : FunSpec({
     }
 
     test("sayHello calls printer n times when n is non-negative") {
-        // val printer = mockk<(String) -> Unit>()
-
         checkAll(
             20, // reduce the number of iterations to avoid slow test
             Arb.int(0, 100), // too large n may cause a stack overflow because of mockk
