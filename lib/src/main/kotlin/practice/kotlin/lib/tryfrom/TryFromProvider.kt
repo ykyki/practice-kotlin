@@ -9,7 +9,7 @@ public interface TryFromProvider<T, in F, out E : Any> {
     public fun tryFrom(from: F): Result<T, E>
 }
 
-public infix fun <T, F, E : Any> F.tryInto(v: TryFromProvider<T, F, E>) = v.tryFrom(this)
+public fun <T, F, E : Any> F.tryInto(v: TryFromProvider<T, F, E>) = v.tryFrom(this)
 
 @JvmInline
 internal value class ErrorString(val value: String)
