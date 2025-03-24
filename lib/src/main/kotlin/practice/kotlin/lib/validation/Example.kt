@@ -24,12 +24,13 @@ internal data class User(
             name: String,
             age: Int,
             updatedAt: String,
-        ): Validation<User, FormatError> =
+        ) =
             Validation.map3(
                 UserName.tryFrom(name),
                 UserAge.tryFrom(age),
                 UserUpdatedAt.tryFrom(updatedAt),
-            ) { name, age, updatedAt -> User(name, age, updatedAt) }
+                ::User,
+            )
     }
 }
 
@@ -37,7 +38,7 @@ internal data class UserName(val valur: String) {
     internal companion object {
         private const val NAME = "username"
 
-        fun tryFrom(s: String): Validation<UserName, FormatError> =
+        fun tryFrom(s: String) =
             Validation.map3(
                 s.shouldBeLongerThan(3, NAME),
                 s.shouldBeShorterThan(20, NAME),
@@ -50,11 +51,16 @@ internal data class UserAge(val value: Int) {
     internal companion object {
         private const val NAME = "age"
 
-        fun tryFrom(n: Int): Validation<UserAge, FormatError> =
-            Validation.map2(
+        fun tryFrom(n: Int) =
+            Validation.foldToConst(
+                Validation.ok(UserAge(n)),
                 n.shouldBeGreaterThan(0, NAME),
                 n.shouldBeLessThan(150, NAME),
-            ) { _, _ -> UserAge(n) }
+            )
+        // Validation.map2(
+        //     n.shouldBeGreaterThan(0, NAME),
+        //     n.shouldBeLessThan(150, NAME),
+        // ) { _, _ -> UserAge(n) }
     }
 }
 
@@ -62,7 +68,7 @@ internal data class UserUpdatedAt(val value: Instant) {
     internal companion object {
         private const val NAME = "updated_at"
 
-        fun tryFrom(s: String): Validation<UserUpdatedAt, FormatError> =
+        fun tryFrom(s: String) =
             s.shouldBeValidTimestamp(NAME).map { UserUpdatedAt(it) }
     }
 }
@@ -102,7 +108,7 @@ internal fun String.shouldBeValidTimestamp(
 ): Validation<Instant, FormatError> =
     try {
         Validation.ok(Instant.parse(this))
-    } catch (e: DateTimeParseException) {
+    } catch (_: DateTimeParseException) {
         Validation.err(FormatError("$name should be a valid timestamp, but it is not"))
     }
 

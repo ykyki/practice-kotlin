@@ -3,13 +3,14 @@ package practice.kotlin.lib.validation
 import com.github.michaelbull.result.Result
 
 public sealed class Validation<out A, out E : Any> {
+    @Suppress("TooManyFunctions")
     public companion object {
         public fun <A> ok(a: A): Validation<A, Nothing> = Ok(a)
         public fun <E : Any> err(e: E): Validation<Nothing, E> = Err(e)
 
         public fun <A, E : Any> unit(a: A): Validation<A, E> = ok(a)
 
-        public infix fun <A, B, E : Any> (Validation<(A) -> B, E>).apply(
+        public fun <A, B, E : Any> (Validation<(A) -> B, E>).apply(
             fa: Validation<A, E>,
         ): Validation<B, E> = when (this) {
             is Ok -> when (fa) {
@@ -81,6 +82,11 @@ public sealed class Validation<out A, out E : Any> {
                 .apply(fd)
                 .apply(fe)
 
+        public fun <A, B, E : Any> foldToConst(
+            fa: Validation<A, E>,
+            vararg fbs: Validation<B, E>
+        ): Validation<A, E> = fbs.fold(fa) { acc, fb -> map2(acc, fb) { a, _ -> a } }
+
         public fun <A, B, E : Any> traverse(
             la: List<A>,
             f: (A) -> Validation<B, E>,
@@ -103,11 +109,11 @@ public fun <A, E : Any> Result<A, E>.toValidation() = when {
     else -> Validation.err(error)
 }
 
-internal data class Err<E : Any>(
-    val head: E,
-    val tail: List<E> = emptyList(),
-) : Validation<Nothing, E>() {
-    fun errors() = listOf(head) + tail
-}
+public data class Ok<A>(val value: A) : Validation<A, Nothing>()
 
-internal data class Ok<A>(val value: A) : Validation<A, Nothing>()
+public data class Err<E : Any>(
+    internal val head: E,
+    internal val tail: List<E> = emptyList(),
+) : Validation<Nothing, E>() {
+    public fun errors(): List<E> = listOf(head) + tail
+}
