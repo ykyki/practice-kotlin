@@ -65,23 +65,6 @@ public sealed class Validation<out A, out E : Any> {
                 .apply(fc)
                 .apply(fd)
 
-        @Suppress("LongParameterList")
-        public fun <A, B, C, D, E, F, Err : Any> map5(
-            fa: Validation<A, Err>,
-            fb: Validation<B, Err>,
-            fc: Validation<C, Err>,
-            fd: Validation<D, Err>,
-            fe: Validation<E, Err>,
-            f: (A, B, C, D, E) -> F
-        ): Validation<F, Err> =
-            @Suppress("ParameterListWrapping", "Wrapping", "MaximumLineLength", "MaxLineLength", "ArgumentListWrapping")
-            unit<(A) -> (B) -> (C) -> (D) -> (E) -> F, Err> { a -> { b -> { c -> { d -> { e -> f(a, b, c, d, e) } } } } } // @formatter:off
-                .apply(fa)
-                .apply(fb)
-                .apply(fc)
-                .apply(fd)
-                .apply(fe)
-
         public fun <A, B, E : Any> foldToConst(
             fa: Validation<A, E>,
             vararg fbs: Validation<B, E>
