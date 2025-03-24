@@ -6,7 +6,7 @@ public sealed class Validation<out A, out E : Any> {
     @Suppress("TooManyFunctions")
     public companion object {
         public fun <A> ok(a: A): Validation<A, Nothing> = Ok(a)
-        public fun <E : Any> err(e: E): Validation<Nothing, E> = Err(e)
+        public fun <E : Any> error(e: E): Validation<Nothing, E> = Error(e)
 
         public fun <A, E : Any> unit(a: A): Validation<A, E> = ok(a)
 
@@ -15,12 +15,12 @@ public sealed class Validation<out A, out E : Any> {
         ): Validation<B, E> = when (this) {
             is Ok -> when (fa) {
                 is Ok -> ok(this.value(fa.value))
-                is Err -> fa
+                is Error -> fa
             }
 
-            is Err -> when (fa) {
+            is Error -> when (fa) {
                 is Ok -> this
-                is Err -> Err(this.head, this.tail + fa.errors())
+                is Error -> this.merge(fa)
             }
         }
 
@@ -29,7 +29,7 @@ public sealed class Validation<out A, out E : Any> {
             f: (A) -> B
         ): Validation<B, E> = when (fa) {
             is Ok -> ok(f(fa.value))
-            is Err -> fa
+            is Error -> fa
         }
 
         public fun <A, B, C, E : Any> map2(
@@ -82,21 +82,23 @@ public sealed class Validation<out A, out E : Any> {
     }
 
     public fun isOk(): Boolean = this is Ok
-    public fun isErr(): Boolean = this is Err
+    public fun isError(): Boolean = this is Error
 
     public fun <B> map(f: (A) -> B): Validation<B, E> = map(this, f)
 }
 
 public fun <A, E : Any> Result<A, E>.toValidation() = when {
     isOk -> Validation.ok(value)
-    else -> Validation.err(error)
+    else -> Validation.error(error)
 }
 
-public data class Ok<A>(val value: A) : Validation<A, Nothing>()
+public data class Ok<A> internal constructor(val value: A) : Validation<A, Nothing>()
 
-public data class Err<E : Any>(
-    internal val head: E,
-    internal val tail: List<E> = emptyList(),
+public data class Error<E : Any> internal constructor(
+    private val head: E,
+    private val tail: List<E> = emptyList(),
 ) : Validation<Nothing, E>() {
     public fun errors(): List<E> = listOf(head) + tail
+
+    internal fun merge(other: Error<E>): Error<E> = Error(head, tail + other.errors())
 }

@@ -77,7 +77,7 @@ internal fun String.shouldNotBeEmpty(
     name: String = "input"
 ): Validation<String, FormatError> = when {
     isNotEmpty() -> Validation.ok(this)
-    else -> Validation.err(FormatError("$name should not be empty, but it is"))
+    else -> Validation.error(FormatError("$name should not be empty, but it is"))
 }
 
 internal fun String.shouldBeLongerThan(
@@ -85,7 +85,7 @@ internal fun String.shouldBeLongerThan(
     name: String = "input"
 ): Validation<String, FormatError> = when {
     length > n -> Validation.ok(this)
-    else -> Validation.err(FormatError("$name should be longer than $n, but its length is $length"))
+    else -> Validation.error(FormatError("$name should be longer than $n, but its length is $length"))
 }
 
 internal fun String.shouldBeShorterThan(
@@ -93,13 +93,13 @@ internal fun String.shouldBeShorterThan(
     name: String = "input"
 ): Validation<String, FormatError> = when {
     length < n -> Validation.ok(this)
-    else -> Validation.err(FormatError("$name should be shorter than $n, but its length is $length"))
+    else -> Validation.error(FormatError("$name should be shorter than $n, but its length is $length"))
 }
 
 internal fun String.shouldNotContainWhitespace(
     name: String = "input"
 ): Validation<String, FormatError> = when {
-    contains(Regex("\\s")) -> Validation.err(FormatError("$name should not contain whitespace, but it does"))
+    contains(Regex("\\s")) -> Validation.error(FormatError("$name should not contain whitespace, but it does"))
     else -> Validation.ok(this)
 }
 
@@ -109,7 +109,7 @@ internal fun String.shouldBeValidTimestamp(
     try {
         Validation.ok(Instant.parse(this))
     } catch (_: DateTimeParseException) {
-        Validation.err(FormatError("$name should be a valid timestamp, but it is not"))
+        Validation.error(FormatError("$name should be a valid timestamp, but it is not"))
     }
 
 internal fun Int.shouldBeLessThan(
@@ -117,7 +117,7 @@ internal fun Int.shouldBeLessThan(
     name: String = "input"
 ): Validation<Int, FormatError> = when {
     this < n -> Validation.ok(this)
-    else -> Validation.err(FormatError("$name should be less than $n, but it is not"))
+    else -> Validation.error(FormatError("$name should be less than $n, but it is not"))
 }
 
 internal fun Int.shouldBeGreaterThan(
@@ -125,5 +125,5 @@ internal fun Int.shouldBeGreaterThan(
     name: String = "input"
 ): Validation<Int, FormatError> = when {
     this > n -> Validation.ok(this)
-    else -> Validation.err(FormatError("$name should be greater than $n, but it is not"))
+    else -> Validation.error(FormatError("$name should be greater than $n, but it is not"))
 }
