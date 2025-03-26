@@ -3,8 +3,7 @@
  */
 package practice.kotlin.app
 
-class MessageUtils {
-    companion object {
-        fun getMessage(): String = "Hello      World!"
-    }
+internal object MessageUtils {
+    @Suppress("FunctionOnlyReturningConstant")
+    fun getMessage(): String = "Hello      World!"
 }
