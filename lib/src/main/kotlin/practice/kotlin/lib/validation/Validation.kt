@@ -41,30 +41,6 @@ public sealed class Validation<out A, out E : Any> {
                 .apply(fa)
                 .apply(fb)
 
-        public fun <A, B, C, D, E : Any> map3(
-            fa: Validation<A, E>,
-            fb: Validation<B, E>,
-            fc: Validation<C, E>,
-            f: (A, B, C) -> D
-        ): Validation<D, E> =
-            unit<(A) -> (B) -> (C) -> D, E> { a -> { b -> { c -> f(a, b, c) } } }
-                .apply(fa)
-                .apply(fb)
-                .apply(fc)
-
-        public fun <A, B, C, D, E, Err : Any> map4(
-            fa: Validation<A, Err>,
-            fb: Validation<B, Err>,
-            fc: Validation<C, Err>,
-            fd: Validation<D, Err>,
-            f: (A, B, C, D) -> E
-        ): Validation<E, Err> =
-            unit<(A) -> (B) -> (C) -> (D) -> E, Err> { a -> { b -> { c -> { d -> f(a, b, c, d) } } } }
-                .apply(fa)
-                .apply(fb)
-                .apply(fc)
-                .apply(fd)
-
         public fun <A, B, E : Any> foldToConst(
             fa: Validation<A, E>,
             vararg fbs: Validation<B, E>

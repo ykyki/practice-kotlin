@@ -25,7 +25,7 @@ internal data class User(
             age: Int,
             updatedAt: String,
         ) =
-            Validation.map3(
+            zip(
                 UserName.tryFrom(name),
                 UserAge.tryFrom(age),
                 UserUpdatedAt.tryFrom(updatedAt),
@@ -39,7 +39,7 @@ internal data class UserName(val valur: String) {
         private const val NAME = "username"
 
         fun tryFrom(s: String) =
-            Validation.map3(
+            zip(
                 s.shouldBeLongerThan(3, NAME),
                 s.shouldBeShorterThan(20, NAME),
                 s.shouldNotContainWhitespace(NAME),
@@ -57,10 +57,6 @@ internal data class UserAge(val value: Int) {
                 n.shouldBeGreaterThan(0, NAME),
                 n.shouldBeLessThan(150, NAME),
             )
-        // Validation.map2(
-        //     n.shouldBeGreaterThan(0, NAME),
-        //     n.shouldBeLessThan(150, NAME),
-        // ) { _, _ -> UserAge(n) }
     }
 }
 
