@@ -74,10 +74,14 @@ public sealed class Validation<out A, out E : Any> {
             la: List<A>,
             f: (A) -> Validation<B, E>,
         ): Validation<List<B>, E> =
-            la.fold(unit(mutableListOf<B>())) { acc, a ->
-                map2(acc, f(a)) { bs, b ->
-                    bs.apply { add(b) }
-                }
+            sequence(la.map { f(it) })
+
+        public fun <A, E : Any> sequence(
+            la: List<Validation<A, E>>,
+        ): Validation<List<A>, E> =
+            // traverse(la) { it }
+            la.fold(unit(mutableListOf<A>())) { acc, fa ->
+                map2(acc, fa) { as_, a -> as_.apply { add(a) } }
             }
     }
 
