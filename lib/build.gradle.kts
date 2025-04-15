@@ -7,3 +7,7 @@ plugins {
 dependencies {
     implementation(libs.kotlin.result)
 }
+
+kotlin {
+    explicitApi()
+}

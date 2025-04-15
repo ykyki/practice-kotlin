@@ -29,7 +29,7 @@ kotlin {
 
     // enable explicit api mode
     // cf: https://kotlinlang.org/docs/whatsnew14.html#mixing-named-and-positional-arguments
-    explicitApi()
+    // explicitApi()
 }
 
 tasks.withType<Test>().configureEach {
