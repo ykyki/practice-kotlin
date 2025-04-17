@@ -29,4 +29,3 @@ value class String50 private constructor(val value: String) {
         }
     }
 }
-

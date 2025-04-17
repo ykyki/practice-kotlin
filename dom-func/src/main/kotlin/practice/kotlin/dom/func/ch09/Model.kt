@@ -216,4 +216,3 @@ data class OrderAcknowledgementSent(
     val orderId: OrderId,
     val emailAddress: EmailAddress,
 )
-
