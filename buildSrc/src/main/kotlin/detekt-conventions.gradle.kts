@@ -20,6 +20,10 @@ tasks.withType<Detekt>().configureEach {
     }
 }
 
+tasks.named("check") {
+    dependsOn("detektMain", "detektTest")
+}
+
 dependencies {
     detektPlugins(libs.detekt.formatting)
 }
