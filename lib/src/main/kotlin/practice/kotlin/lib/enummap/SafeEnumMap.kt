@@ -11,6 +11,7 @@ public data class SafeEnumMap<E : Enum<E>, V> private constructor(
         }
     )
 
+    @Suppress("UnsafeCallOnNullableType")
     override fun get(key: E): V = map[key]!!
 
     public companion object {

@@ -8,7 +8,8 @@ fun <T> predicateToPassthru(
     if (f(x)) {
         x
     } else {
-        throw IllegalArgumentException(errorMsg)
+        require(false) { errorMsg }
+        x // コンパイラのために到達不能コードとして追加（実際には実行されない）
     }
 
 @JvmInline
