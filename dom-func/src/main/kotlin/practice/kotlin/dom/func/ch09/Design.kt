@@ -15,6 +15,23 @@ package practice.kotlin.dom.func.ch09
  * エラーハンドリングも一切なし
  */
 
+// --------- place order ---------
+typealias PlaceOrderFun = (ValidateOrder)
+-> (PriceOrder)
+-> (AcknowledgeOrder)
+-> (CreateEvents)
+-> (UnvalidatedOrder)
+-> List<PlaceOrderEvent>
+
+typealias PlaceOrderWorkflowFun = (CheckAddressExists) // ambient dependencies
+-> (CheckProductCodeExists)
+-> (GetProductPrice)
+-> (CreateOrderAcknowledgementLetter)
+-> (SendOrderAcknowledgement)
+-> PlaceOrderFun
+
+interface PlaceOrderWorkflow : PlaceOrderWorkflowFun
+
 // --------- validate ---------
 
 typealias ValidateOrderFun = (CheckProductCodeExists)

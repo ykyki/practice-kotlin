@@ -102,7 +102,6 @@ private fun toCustomerInfo(
     return CustomerInfo(name, emailAddress)
 }
 
-@Suppress("UNUSED_PARAMETER")
 private fun toAddress(
     checkAddressExists: CheckAddressExists,
     address: UnvalidatedAddress,
