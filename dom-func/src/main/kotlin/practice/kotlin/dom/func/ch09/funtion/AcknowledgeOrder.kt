@@ -9,7 +9,7 @@ import practice.kotlin.dom.func.ch09.SendOrderAcknowledgement
 import practice.kotlin.dom.func.ch09.SendResult
 import practice.kotlin.lib.curry.curry
 
-val acknowledgeOrder: AcknowledgeOrder = AcknowledgeOrderImpl()
+val acknowledgeOrderFun: AcknowledgeOrder = AcknowledgeOrderImpl()
 
 class AcknowledgeOrderImpl : AcknowledgeOrder {
     override fun invoke(

@@ -9,7 +9,7 @@ import practice.kotlin.dom.func.ch09.PricedOrderLine
 import practice.kotlin.dom.func.ch09.ValidatedOrder
 import practice.kotlin.dom.func.ch09.ValidatedOrderLine
 
-val priceOrder: PriceOrderFun = PricedOrderImpl()
+val priceOrderFun: PriceOrderFun = PricedOrderImpl()
 
 class PricedOrderImpl : PriceOrder {
     override fun invoke(getProductPrice: GetProductPrice): (ValidatedOrder) -> PricedOrder = {

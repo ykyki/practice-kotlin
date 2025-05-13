@@ -6,7 +6,7 @@ import practice.kotlin.dom.func.ch09.PlaceOrderEvent
 import practice.kotlin.dom.func.ch09.PricedOrder
 import java.math.BigDecimal
 
-val createEvents: CreateEvents = CreateEventsImpl()
+val createEventsFun: CreateEvents = CreateEventsImpl()
 
 class CreateEventsImpl : CreateEvents {
     override fun invoke(
