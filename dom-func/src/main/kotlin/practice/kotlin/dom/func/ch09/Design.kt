@@ -30,7 +30,7 @@ typealias PlaceOrderWorkflowFun = (CheckAddressExists) // ambient dependencies
 -> (SendOrderAcknowledgement)
 -> PlaceOrderFun
 
-interface PlaceOrderWorkflow : PlaceOrderWorkflowFun
+fun interface PlaceOrderWorkflow : PlaceOrderWorkflowFun
 
 // --------- validate ---------
 
@@ -39,25 +39,25 @@ typealias ValidateOrderFun = (CheckProductCodeExists)
 -> (UnvalidatedOrder)
 -> ValidatedOrder
 
-interface ValidateOrder : ValidateOrderFun
+fun interface ValidateOrder : ValidateOrderFun
 
 typealias CheckAddressExistsFun = (UnvalidatedAddress) -> CheckedAddress
 
-interface CheckAddressExists : CheckAddressExistsFun
+fun interface CheckAddressExists : CheckAddressExistsFun
 
 typealias CheckProductCodeExistsFun = (ProductCode) -> Boolean
 
-interface CheckProductCodeExists : CheckProductCodeExistsFun
+fun interface CheckProductCodeExists : CheckProductCodeExistsFun
 
 // --------- price order ---------
 
 typealias PriceOrderFun = (GetProductPrice) -> (ValidatedOrder) -> PricedOrder
 
-interface PriceOrder : PriceOrderFun
+fun interface PriceOrder : PriceOrderFun
 
 typealias GetProductPriceFun = (ProductCode) -> Price
 
-interface GetProductPrice : GetProductPriceFun
+fun interface GetProductPrice : GetProductPriceFun
 
 // --------- acknowledge order ---------
 
@@ -66,15 +66,15 @@ typealias AcknowledgeOrderFun = (CreateOrderAcknowledgementLetter)
 -> (PricedOrder)
 -> OrderAcknowledgementSent?
 
-interface AcknowledgeOrder : AcknowledgeOrderFun
+fun interface AcknowledgeOrder : AcknowledgeOrderFun
 
 typealias CreateOrderAcknowledgementLetterFun = (PricedOrder) -> HtmlString
 
-interface CreateOrderAcknowledgementLetter : CreateOrderAcknowledgementLetterFun
+fun interface CreateOrderAcknowledgementLetter : CreateOrderAcknowledgementLetterFun
 
 typealias SendOrderAcknowledgementFun = (OrderAcknowledgement) -> SendResult
 
-interface SendOrderAcknowledgement : SendOrderAcknowledgementFun
+fun interface SendOrderAcknowledgement : SendOrderAcknowledgementFun
 
 // -------- create events ---------
 
@@ -82,7 +82,7 @@ typealias CreateEventsFun = (PricedOrder) // 入力
 -> (OrderAcknowledgementSent?) // 前ステップのイベント
 -> List<PlaceOrderEvent>
 
-interface CreateEvents : CreateEventsFun
+fun interface CreateEvents : CreateEventsFun
 
 sealed class PlaceOrderEvent {
     // 配送コンテキストに送信するイベント
